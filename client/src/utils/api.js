@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 const api = axios.create({
-  baseURL: 'http://localhost:5000',
+  baseURL: API_URL,
   withCredentials: true, // Crucial for HttpOnly cookies
   timeout: 10000, // 10-second timeout — prevent silent hangs
   headers: {
@@ -68,7 +70,7 @@ api.interceptors.response.use(
 
     try {
       const response = await axios.post(
-        'http://localhost:5000/api/auth/refresh',
+        `${API_URL}/api/auth/refresh`,
         {},
         { withCredentials: true, timeout: 5000 }
       );
