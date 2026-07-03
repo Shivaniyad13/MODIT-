@@ -109,22 +109,31 @@ const Navbar = () => {
               )}
             </Link>
 
-            {/* User badge */}
-            {user && (
-              <div className="hidden md:flex items-center gap-2 bg-dark-900 border border-dark-800 px-2.5 py-1.5 rounded-lg">
-                {getRoleIcon()}
-                <span className="text-sm font-semibold text-white max-w-[120px] truncate">{user.name}</span>
-              </div>
-            )}
+            {/* User badge & Auth Actions */}
+            {user ? (
+              <>
+                <div className="hidden md:flex items-center gap-2 bg-dark-900 border border-dark-800 px-2.5 py-1.5 rounded-lg">
+                  {getRoleIcon()}
+                  <span className="text-sm font-semibold text-white max-w-[120px] truncate">{user.name}</span>
+                </div>
 
-            {/* Logout */}
-            <button
-              onClick={handleLogout}
-              title="Log Out"
-              className="p-2 rounded-lg bg-dark-900 border border-dark-800 hover:bg-red-500/10 hover:border-red-500/30 text-dark-300 hover:text-red-400 transition-all"
-            >
-              <LogOut className="h-5 w-5" />
-            </button>
+                {/* Logout */}
+                <button
+                  onClick={handleLogout}
+                  title="Log Out"
+                  className="p-2 rounded-lg bg-dark-900 border border-dark-800 hover:bg-red-500/10 hover:border-red-500/30 text-dark-300 hover:text-red-400 transition-all"
+                >
+                  <LogOut className="h-5 w-5" />
+                </button>
+              </>
+            ) : (
+              <Link
+                to="/login"
+                className="px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white rounded-lg text-sm font-semibold transition-all shadow-md shadow-brand-600/15"
+              >
+                Login / Sign Up
+              </Link>
+            )}
 
             {/* Mobile Menu Toggle */}
             <button

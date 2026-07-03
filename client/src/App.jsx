@@ -37,8 +37,8 @@ function App() {
         <Route path="/register" element={<Register />} />
 
         {/* ── Catalog ── */}
-        <Route path="/catalog" element={<ProtectedRoute allowedRoles={ALL_ROLES}><Catalog /></ProtectedRoute>} />
-        <Route path="/products/:id" element={<ProtectedRoute allowedRoles={ALL_ROLES}><ProductDetail /></ProtectedRoute>} />
+        <Route path="/catalog" element={<Catalog />} />
+        <Route path="/products/:id" element={<ProductDetail />} />
         <Route path="/cart" element={<ProtectedRoute allowedRoles={ALL_ROLES}><Cart /></ProtectedRoute>} />
 
         {/* ── Suppliers Map ── */}
@@ -60,8 +60,8 @@ function App() {
         <Route path="/dashboard/admin" element={<ProtectedRoute allowedRoles={['admin']}><Dashboard /></ProtectedRoute>} />
 
         {/* ── Fallback ── */}
-        <Route path="/" element={<Navigate to="/login" replace />} />
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="/" element={<Navigate to="/catalog" replace />} />
+        <Route path="*" element={<Navigate to="/catalog" replace />} />
       </Routes>
     </Router>
   );
