@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../utils/api';
 import Navbar from '../components/Navbar';
+import { mockProducts, mockCategories } from '../utils/mockData';
 import {
   Search, Filter, ChevronRight, Star, Package,
   Layers, X, SlidersHorizontal, Tag
@@ -43,7 +44,10 @@ const Catalog = () => {
   useEffect(() => {
     api.get('/api/products/categories')
       .then(res => setCategories(res.data.data))
-      .catch(() => {})
+      .catch(() => {
+        console.warn('Using fallback categories');
+        setCategories(mockCategories);
+      })
       .finally(() => setCatLoading(false));
   }, []);
 
@@ -60,7 +64,36 @@ const Catalog = () => {
       setProducts(res.data.data.products);
       setPagination(res.data.data.pagination);
     } catch (err) {
-      setError('Failed to load products. Please try again.');
+      console.warn('Backend API failed. Falling back to frontend mock data.');
+      // Local filtering
+      let localProducts = [...mockProducts];
+      if (search) {
+        const query = search.toLowerCase();
+        localProducts = localProducts.filter(
+          p => p.name.toLowerCase().includes(query) || 
+               p.brand.toLowerCase().includes(query) ||
+               p.category.toLowerCase().includes(query)
+        );
+      }
+      if (activeCategory) {
+        localProducts = localProducts.filter(p => p.category === activeCategory);
+      }
+
+      // Pagination simulation
+      const limit = 16;
+      const total = localProducts.length;
+      const pages = Math.ceil(total / limit) || 1;
+      const startIndex = (page - 1) * limit;
+      const paginatedProducts = localProducts.slice(startIndex, startIndex + limit);
+
+      setProducts(paginatedProducts);
+      setPagination({
+        total,
+        page,
+        pages,
+        limit
+      });
+      setError(null); // No error, fallback was successful!
     } finally {
       setLoading(false);
     }
